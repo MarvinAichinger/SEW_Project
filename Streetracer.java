@@ -4,10 +4,10 @@ import processing.core.*;
 
 public class Streetracer extends PApplet {
 
-    int carY = 500;
-    int carX = 500;
+    float carY = 500;
+    float carX = 500;
     int carRotation = 0;
-    int speed = 0;
+    float speed = 0;
 
     boolean left, right, up, down = false;
 
@@ -44,20 +44,37 @@ public class Streetracer extends PApplet {
 
         if (right) {
             if (speed != 0) {
-            carRotation += 5;
+                carRotation += 5;
             }
         }
 
         if (up) {
-            speed = -5;
+            if (speed < -10) {} else {
+                speed -= 0.1;
+            }
         }
 
         if (down) {
-            speed = 5;
+            if (speed > 2) {} else {
+                if (speed < 0) {
+                    speed += 0.3;
+                }else {
+                    speed += 0.1;
+                }
+            }
         }
-        
+
         if (!down && !up) {
-            speed = 0;
+            if (speed > 0.5 || speed < -0.5) {
+                if (speed > 0) {
+                    speed -= 0.1;
+                }
+                if (speed < 0) {
+                    speed += 0.1;
+                }
+            } else {
+                speed = 0;
+            }
         }
 
     }
