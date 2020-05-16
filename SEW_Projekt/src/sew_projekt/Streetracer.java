@@ -3,13 +3,30 @@ package sew_projekt;
 import processing.core.*;
 
 public class Streetracer extends PApplet {
+    
+    Car testCar = new Car();
 
-    float carY = 500;
-    float carX = 500;
-    int carRotation = 0;
-    float speed = 0;
-
+    //Controls
     boolean left, right, up, down = false;
+
+    //Route
+    //außen
+    PVector P1 = new PVector(900, 600);
+    PVector P2 = new PVector(900, 100);
+    PVector P3 = new PVector(100, 100);
+    PVector P4 = new PVector(100, 600);
+    PVector[] route = {P1, P2, P3, P4};
+    //innen
+    PVector P5 = new PVector(550, 400);
+    PVector P6 = new PVector(550, 300);
+    PVector P7 = new PVector(450, 300);
+    PVector P8 = new PVector(450, 400);
+    PVector[] routeIn = {P5, P6, P7, P8};
+    
+    Route testRoute = new Route(route, routeIn);    
+
+    //Images
+    PImage carSprite;
 
     @Override
     public void settings() {
@@ -19,69 +36,40 @@ public class Streetracer extends PApplet {
     @Override
     public void setup() {
         background(255);
+
+        //Images
+        carSprite = loadImage("Auto_sprite.png");
     }
 
     @Override
     public void draw() {
         background(255);
-
-        pushMatrix();
-        translate(carX, carY);
-        rotate(radians(carRotation));
-        translate(0, speed);
-        fill(0);
-        rect(-5, -12, 10, 25);
-        popMatrix();
-
-        carX += Math.sin(Math.toRadians(carRotation + 180)) * speed;
-        carY += Math.cos(Math.toRadians(carRotation)) * speed;
-
+        
+        testRoute.drawLines(this);
+        testCar.moveCar(this, carSprite);
+        testRoute.routeCollidor(testCar);
+        
+        //Pfeiltasten
         if (left) {
-            if (speed != 0) {
-                carRotation -= 5;
-            }
+            testCar.turnLeft();
         }
-
         if (right) {
-            if (speed != 0) {
-                carRotation += 5;
-            }
+            testCar.turnRight();
         }
-
         if (up) {
-            if (speed < -10) {} else {
-                speed -= 0.1;
-            }
+            testCar.accelerate();
         }
-
         if (down) {
-            if (speed > 2) {} else {
-                if (speed < 0) {
-                    speed += 0.3;
-                }else {
-                    speed += 0.1;
-                }
-            }
+            testCar.brake();
         }
-
         if (!down && !up) {
-            if (speed > 0.5 || speed < -0.5) {
-                if (speed > 0) {
-                    speed -= 0.1;
-                }
-                if (speed < 0) {
-                    speed += 0.1;
-                }
-            } else {
-                speed = 0;
-            }
+            testCar.roll();
         }
-
     }
 
+    //Taste wird gedrückt
     @Override
     public void keyPressed() {
-
         if (key == CODED) {
             switch (keyCode) {
                 case LEFT:
@@ -101,8 +89,10 @@ public class Streetracer extends PApplet {
 
     }
 
+    //Taste wird Losgelassen
     @Override
     public void keyReleased() {
+        //Pfeiltasten
         if (key == CODED) {
             switch (keyCode) {
                 case LEFT:
