@@ -3,30 +3,14 @@ package sew_projekt;
 import processing.core.*;
 
 public class Streetracer extends PApplet {
-    
-    Car testCar = new Car();
 
-    //Controls
+    //TestCar: Car/Controls/Sprite
+    Car testCar = new Car();
     boolean left, right, up, down = false;
+    PImage carSprite;
 
     //Route
-    //außen
-    PVector P1 = new PVector(900, 600);
-    PVector P2 = new PVector(900, 100);
-    PVector P3 = new PVector(100, 100);
-    PVector P4 = new PVector(100, 600);
-    PVector[] route = {P1, P2, P3, P4};
-    //innen
-    PVector P5 = new PVector(550, 400);
-    PVector P6 = new PVector(550, 300);
-    PVector P7 = new PVector(450, 300);
-    PVector P8 = new PVector(450, 400);
-    PVector[] routeIn = {P5, P6, P7, P8};
-    
-    Route testRoute = new Route(route, routeIn);    
-
-    //Images
-    PImage carSprite;
+    Route route;
 
     @Override
     public void settings() {
@@ -37,6 +21,9 @@ public class Streetracer extends PApplet {
     public void setup() {
         background(255);
 
+        //Routes
+        createTestRoute();
+
         //Images
         carSprite = loadImage("Auto_sprite.png");
     }
@@ -44,11 +31,11 @@ public class Streetracer extends PApplet {
     @Override
     public void draw() {
         background(255);
-        
-        testRoute.drawLines(this);
+
+        route.drawLines(this);
         testCar.moveCar(this, carSprite);
-        testRoute.routeCollidor(testCar);
-        
+        route.routeCollidor(testCar);
+
         //Pfeiltasten
         if (left) {
             testCar.turnLeft();
@@ -70,6 +57,7 @@ public class Streetracer extends PApplet {
     //Taste wird gedrückt
     @Override
     public void keyPressed() {
+        //Pfeiltasten
         if (key == CODED) {
             switch (keyCode) {
                 case LEFT:
@@ -109,6 +97,24 @@ public class Streetracer extends PApplet {
                     break;
             }
         }
+    }
+
+    public void createTestRoute() {
+        //außen
+        PVector P1 = new PVector(900, 600);
+        PVector P2 = new PVector(900, 100);
+        PVector P3 = new PVector(100, 100);
+        PVector P4 = new PVector(100, 600);
+        PVector[] routeOut = {P1, P2, P3, P4};
+        //innen
+        PVector P5 = new PVector(550, 400);
+        PVector P6 = new PVector(550, 300);
+        PVector P7 = new PVector(450, 300);
+        PVector P8 = new PVector(450, 400);
+        PVector[] routeIn = {P5, P6, P7, P8};
+
+        route = new Route(routeOut, routeIn);
+
     }
 
 }
