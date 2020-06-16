@@ -2,25 +2,55 @@ package sew_projekt;
 
 import processing.core.*;
 
+/**
+ * Klasse für ein Auto.
+ */
 public class Car extends PApplet {
 
-    //Position, Speed, Rotation
-    float carY = 500;
-    float carX = 500;
+    //Aktuelle Position, Geschwindingkeit und Rotation
+    float carY = 950;
+    float carX = 400;
     int carRotation = 0;
     float speed = 0;
+    
+    //Werte der Geschwindigkeit, Beschleunigung, Bremsen und Lenkung
+    float maxSpeed;
+    float acceleration;
+    float brake;
+    float turnAmount;
 
-    //Konstruktor
-    public Car() {
+    /**
+     * Konstruktor
+     * @param carX float
+     * @param carY float
+     * @param carRotation int
+     */
+    public Car(float carX, float carY, int carRotation, float maxSpeed, float acceleration, float brake, float turnAmount) {
+        this.carX = carX;
+        this.carY = carY;
+        this.carRotation = carRotation;
+        
+        this.maxSpeed = maxSpeed;
+        this.acceleration = acceleration;
+        this.brake = brake;
+        this.turnAmount = turnAmount;
     }
 
-    //Beweget das Auto und berechnet neue Position
+    /**
+     * In dieser Methode wird das Auto in die entsprechende Richtung bewegt und
+     * Rotiert, sowie die neue Position auf dem Koordinatensystem berechnet.
+     * @param window PAppplet
+     * @param carSprite PImage
+     */
     public void moveCar(PApplet window, PImage carSprite) {
         window.pushMatrix();
         window.translate(carX, carY);
         window.rotate(radians(carRotation));
         window.translate(0, speed);
-        window.image(carSprite, -10, -20, 20, 40);
+        window.image(carSprite, (float) -7.5, (float) -12.5, 15, 25);
+        //window.noFill();
+        //window.stroke(0);
+        //window.rect((float) -7.5, (float) -12.5, 15, 25);
         window.popMatrix();
 
         carX += Math.sin(Math.toRadians(carRotation + 180)) * speed;
@@ -28,52 +58,61 @@ public class Car extends PApplet {
 
     }
 
-    //Beschleunigen
+    /**
+     * Beschleunigt das Auto.
+     */
     public void accelerate() {
-        if (speed < -10) {
+        if (speed < maxSpeed) {
         } else {
-            speed -= 0.1;
+            speed -= acceleration;
         }
     }
 
-    //Bremsen
+    /**
+     * Bremst bzw. lässt das Auto Rückwärts fahren.
+     */
     public void brake() {
-        if (speed > 2) {
+        if (speed > (maxSpeed * (-0.2))) {
         } else {
             if (speed < 0) {
-                speed += 0.3;
+                speed += brake;
             } else {
-                speed += 0.1;
+                speed += acceleration;
             }
         }
     }
 
-    //Rechts Lenken
+    /**
+     * Verändert die Rotation des Autos nach rechts.
+     */
     public void turnRight() {
         if (speed != 0) {
-            carRotation += 5;
+            carRotation += turnAmount;
         }
     }
 
-    //Links Lenken
+    /**
+     * Verändert die Rotation des Autos nach links.
+     */
     public void turnLeft() {
         if (speed != 0) {
-            carRotation -= 5;
+            carRotation -= turnAmount;
         }
     }
 
-    //Das Auto wird langsam langsamer
+    /**
+     * Lässt das Auto langsam ausrollen.
+     */
     public void roll() {
-        if (speed > 0.5 || speed < -0.5) {
+        if (speed > acceleration || speed < (acceleration * (-1))) {
             if (speed > 0) {
-                speed -= 0.1;
+                speed -= acceleration;
             }
             if (speed < 0) {
-                speed += 0.1;
+                speed += acceleration;
             }
         } else {
             speed = 0;
         }
     }
-
 }
